@@ -1,12 +1,6 @@
 <?php
 
-$config = array(
-    'admin' => array(
-        'core:AdminPassword',
-    ),
-
-    'example-userpass' => array(
-        'exampleauth:UserPass',
+$users = array(
         'user1:user1pass' => array(
             'uid' => array('1'),
             'first_name' => 'User',
@@ -30,5 +24,16 @@ $config = array(
             'name' => 'User Four',
             'email' => 'user_4@example.com',
         ),
+    );
+if (getenv('SIMPLESAMLPHP_USERS') != '') {
+    $decoded = json_decode(getenv('SIMPLESAMLPHP_USERS'), TRUE);
+    $users = $decoded? $decoded : $users;
+}
+
+$config = array(
+
+    'admin' => array(
+        'core:AdminPassword',
     ),
+    'example-userpass' => array('exampleauth:UserPass') + $users
 );
